@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id');
             $table->foreignId('user_id')->nullable();
+            $table->string('order_number')->nullable();
             $table->foreignId('customer_id')->nullable();
             $table->foreignId('status_id')->default(1);
             $table->timestamps();

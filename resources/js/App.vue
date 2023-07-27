@@ -14,13 +14,13 @@
                             <span class="hidden sm:inline">Home</span>
                         </li>
                     </router-link>
-                    <router-link to="/">
+                    <router-link to="/pending-orders">
                         <li class="py-2 hover:bg-indigo-300 rounded">
                             <img src="//cdn.jsdelivr.net/npm/heroicons@1.0.1/outline/cube.svg"
                                  class="w-7 sm:mx-2 mx-4 inline"/> <span class="hidden sm:inline">Pending Orders</span>
                         </li>
                     </router-link>
-                    <router-link to="/">
+                    <router-link to="/fulfilled-orders">
                         <li class="py-2 hover:bg-indigo-300 rounded">
                             <a class="truncate" href="/">
                                 <img src="//cdn.jsdelivr.net/npm/heroicons@1.0.1/outline/collection.svg"

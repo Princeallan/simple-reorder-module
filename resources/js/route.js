@@ -10,6 +10,14 @@ const router = createRouter({
         {
             path: '/home',
             component: () => import('./pages/Home.vue')
+        },
+        {
+            path: '/pending-orders',
+            component: () => import('./pages/PendingOrder.vue')
+        },
+        {
+            path: '/fulfilled-orders',
+            component: () => import('./pages/FulfilledOrder.vue')
         }
     ],
 })

@@ -8,13 +8,10 @@
                     Product name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Quantity
+                    Order Date
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Fulfilled Orders No.
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Active Order
+                    Status
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Action
@@ -23,24 +20,20 @@
             </thead>
             <tbody>
 
-            <tr v-for="product in products" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+            <tr v-for="order in orders" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ product.name }}
+                    {{ order.name }}
                 </th>
                 <td class="px-6 py-4">
-                    {{ product.quantity }}
+                    {{ order.created_at }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ product.fulfilled_orders_count }}
+                    {{ order.order_number }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ product.order_number }}
-                </td>
-                <td class="px-6 py-4">
-                    <button v-if="product.quantity > 0"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            @click="handleOrder(product.id)">
-                        order
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            @click="fulFillOrder(order.id)">
+                        Fulfill
                     </button>
                 </td>
             </tr>
@@ -54,25 +47,26 @@ import {ref, onMounted} from 'vue'
 // import {request} from '../helper'
 // import Loader from './components/Loader.vue';
 
-const products = ref([])
+const orders = ref([])
 const isLoading = ref()
+const status = ref(1)
 
 onMounted(() => {
-    handleProducts()
+    listPendingOrders()
 });
 
-const handleProducts = async () => {
+const listPendingOrders = async () => {
     isLoading.value = true
-    const req = await axios.get('/api/products')
-    products.value = req.data.data
+    const req = await axios.get('/api/orders/' + status.value)
+    orders.value = req.data.data
     isLoading.value = false
 }
 
-const handleOrder = async (product_id) => {
+const fulFillOrder = async (order_id) => {
     isLoading.value = true
-    alert('are you sure you want to make this order?')
-    await axios.post('/api/add-order/' + product_id)
-    await handleProducts()
+    alert('are you sure you want to fulfil this order?')
+    await axios.post('/api/order/update/' + order_id + '/' + status.value)
+    await listPendingOrders()
     isLoading.value = false
 }
 </script>

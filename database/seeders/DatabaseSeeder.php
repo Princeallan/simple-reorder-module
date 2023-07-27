@@ -16,10 +16,11 @@ class DatabaseSeeder extends Seeder
     {
 
         Product::factory(10)->create();
-        Order::factory(20)->create();
+//        Order::factory(20)->create();
 
         $this->call([
-            StatusSeeder::class
+            StatusSeeder::class,
+            OrderSeeder::class
         ]);
     }
 }
