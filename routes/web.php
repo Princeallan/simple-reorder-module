@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/{any_url?}', function() {
     return view('index');
-});
+})->where('any_url', '[\/\w\.-]*');

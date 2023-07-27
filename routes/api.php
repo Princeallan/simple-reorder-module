@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get('products', [ProductController::class,'index']); //->middleware('auth:sanctum');
+Route::post('add-order', [OrderController::class,'addOrder']); //->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
