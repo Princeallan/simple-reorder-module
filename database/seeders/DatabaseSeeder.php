@@ -5,6 +5,8 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +23,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             StatusSeeder::class,
             OrderSeeder::class
+        ]);
+
+        User::factory()->create([
+            'email' => 'demoadmin@example.com',
+            'name' => 'Demo Admin',
+            'password' => bcrypt('Secret123!'),
+            'email_verified_at' => Carbon::now()
         ]);
     }
 }

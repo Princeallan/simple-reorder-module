@@ -49,6 +49,13 @@ import AppLayout from "../layouts/AppLayout.vue";
 const orders = ref([])
 const isLoading = ref()
 const status = ref(2)
+const token = localStorage.getItem('APP_USER_TOKEN')
+
+const headers = {
+    headers: {
+        Authorization: 'Bearer ' + token
+    }
+}
 
 onMounted(() => {
     listFulfilledOrders()
@@ -56,7 +63,7 @@ onMounted(() => {
 
 const listFulfilledOrders = async () => {
     isLoading.value = true
-    const req = await axios.get('/api/orders/' + status.value)
+    const req = await axios.get('/api/orders/' + status.value, headers)
     orders.value = req.data.data
     isLoading.value = false
 }

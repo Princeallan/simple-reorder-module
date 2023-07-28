@@ -1,9 +1,9 @@
 <template>
-    <div class="mx-auto w-4/12 mt-10 bg-blue-200 p-4 rounded-lg">
+    <div class="mx-auto w-4/12 mt-14 p-4 rounded-lg">
         <div
             class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-2 flex flex-col"
         >
-            <h1 class="text-gray-600 py-5 font-bold text-3xl"> Login </h1>
+            <h1 class="text-gray-600 py-5 font-bold text-3xl"> Sign In </h1>
             <ul class="list-disc text-red-400" v-for="(value, index) in errors" :key="index" v-if="typeof errors === 'object'">
                 <li>{{value[0]}}</li>
             </ul>
@@ -46,12 +46,7 @@
                     >
                         Sign In
                     </button>
-                    <router-link
-                        class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-                        to="register"
-                    >
-                        Sign Up
-                    </router-link>
+
                 </div>
             </form>
         </div>
@@ -72,7 +67,7 @@ const handleLogin = async () => {
     try {
         const result = await axios.post('/api/auth/login', form)
         if (result.status === 200 && result.data && result.data.token) {
-            localStorage.setItem('APP_DEMO_USER_TOKEN', result.data.token)
+            localStorage.setItem('APP_USER_TOKEN', result.data.token)
             await router.push('home')
         }
     } catch (e) {

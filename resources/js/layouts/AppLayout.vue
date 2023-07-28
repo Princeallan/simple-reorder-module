@@ -22,13 +22,16 @@
                     </router-link>
                     <router-link to="/fulfilled-orders">
                         <li class="py-2 hover:bg-indigo-300 rounded">
-                            <a class="truncate" href="/">
-                                <img src="//cdn.jsdelivr.net/npm/heroicons@1.0.1/outline/collection.svg"
-                                     class="w-7 sm:mx-2 mx-4 inline"/> <span
-                                class="hidden sm:inline">Fulfilled Orders</span>
-                            </a>
+                            <img src="//cdn.jsdelivr.net/npm/heroicons@1.0.1/outline/collection.svg"
+                                 class="w-7 sm:mx-2 mx-4 inline"/> <span
+                            class="hidden sm:inline">Fulfilled Orders</span>
                         </li>
                     </router-link>
+                    <li class="py-2 hover:bg-indigo-300 rounded" @click="handleLogout">
+                            <img src="//cdn.jsdelivr.net/npm/heroicons@1.0.1/outline/ban.svg"
+                                 class="w-7 sm:mx-2 mx-4 inline"/> <span
+                            class="hidden sm:inline">Logout</span>
+                    </li>
 
                 </ul>
             </div>
@@ -41,4 +44,12 @@
     </div>
 
 </template>
+<script setup>
+import {useRouter} from "vue-router";
 
+let router = useRouter();
+const handleLogout = () => {
+    localStorage.removeItem('APP_USER_TOKEN')
+    router.push('/')
+}
+</script>

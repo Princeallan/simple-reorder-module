@@ -58,14 +58,20 @@ import AppLayout from "../layouts/AppLayout.vue";
 
 const products = ref([])
 const isLoading = ref()
+const token = localStorage.getItem('APP_USER_TOKEN')
 
+const headers = {
+    headers: {
+        Authorization: 'Bearer ' + token
+    }
+}
 onMounted(() => {
     handleProducts()
 });
 
 const handleProducts = async () => {
     isLoading.value = true
-    const req = await axios.get('/api/products')
+    const req = await axios.get('/api/products', headers)
     products.value = req.data.data
     isLoading.value = false
 }
@@ -73,7 +79,7 @@ const handleProducts = async () => {
 const handleOrder = async (product_id) => {
     isLoading.value = true
     alert('are you sure you want to make this order?')
-    await axios.post('/api/add-order/' + product_id)
+    await axios.post('/api/add-order/' + product_id, {}, headers)
     await handleProducts()
     isLoading.value = false
 }

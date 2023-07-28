@@ -21,15 +21,15 @@ const router = createRouter({
         }
     ],
 })
-// router.beforeEach((to, from, next) => {
-//     if (to.path !== '/' && !isAuthenticated()) {
-//         return next({path: '/'})
-//     }
-//     return next()
-// })
+router.beforeEach((to, from, next) => {
+    if (to.path !== '/' && !isAuthenticated()) {
+        return next({path: '/'})
+    }
+    return next()
+})
 
-// function isAuthenticated() {
-//     return Boolean(localStorage.getItem('APP_USER_TOKEN'))
-// }
+function isAuthenticated() {
+    return Boolean(localStorage.getItem('APP_USER_TOKEN'))
+}
 
 export default router;

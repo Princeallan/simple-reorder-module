@@ -54,14 +54,20 @@ const orders = ref([])
 const isLoading = ref()
 const status = ref(1)
 const fulfil = ref(2)
+const token = localStorage.getItem('APP_USER_TOKEN')
 
+const headers = {
+    headers: {
+        Authorization: 'Bearer ' + token
+    }
+}
 onMounted(() => {
     listPendingOrders()
 });
 
 const listPendingOrders = async () => {
     isLoading.value = true
-    const req = await axios.get('/api/orders/' + status.value)
+    const req = await axios.get('/api/orders/' + status.value, headers)
     orders.value = req.data.data
     isLoading.value = false
 }
@@ -69,7 +75,7 @@ const listPendingOrders = async () => {
 const fulFillOrder = async (order_id) => {
     isLoading.value = true
     alert('are you sure you want to fulfil this order?')
-    await axios.post('/api/order/update/' + order_id + '/' + fulfil.value)
+    await axios.post('/api/order/update/' + order_id + '/' + fulfil.value, {}, headers)
     await listPendingOrders()
     isLoading.value = false
 }
