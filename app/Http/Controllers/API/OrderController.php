@@ -48,12 +48,12 @@ class OrderController extends Controller
     public function listOrders($status_id)
     {
         $orders = Order::query()
-            ->join('products', 'orders.product_id', 'products.id')
-            ->join('statuses', 'orders.status_id', 'statuses.id')
+            ->leftjoin('products', 'orders.product_id', 'products.id')
+            ->leftjoin('statuses', 'orders.status_id', 'statuses.id')
             ->when($status_id, function ($q) use ($status_id) {
-                $q->where('status_id', $status_id);
+                $q->where('orders.status_id', $status_id);
             })
-            ->select('orders.id', 'orders.created_at', 'products.name')
+            ->select('orders.*', 'products.name as product_name', 'statuses.name as status')
             ->get();
 
         return response()->json(['status' => true, 'data' => $orders]);
@@ -61,7 +61,12 @@ class OrderController extends Controller
 
     public function updateOrder($order_id, $status_id)
     {
+        Order::find($order_id)
+            ->update([
+                'status_id' => $status_id
+            ]);
 
+        return response()->json(['status' => true, 'message' => "Ok"], 201);
     }
 
 }

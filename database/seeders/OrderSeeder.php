@@ -15,23 +15,25 @@ class OrderSeeder extends Seeder
     public function run(): void
     {
         Order::truncate();
-
-        Order::create([
+        $orders = [[
             'product_id' => fake()->numberBetween(0, 10),
             'status_id' => fake()->numberBetween(1, 2),
-            'order_number' =>  Str::padLeft(1,6,"0"),
+            'order_number' => Str::padLeft(1, 6, "0"),
         ], [
             'product_id' => fake()->numberBetween(0, 10),
             'status_id' => fake()->numberBetween(1, 2),
-            'order_number' =>  Str::padLeft(2,6,"0"),
+            'order_number' => Str::padLeft(2, 6, "0"),
         ], [
             'product_id' => fake()->numberBetween(0, 10),
             'status_id' => fake()->numberBetween(1, 2),
-            'order_number' =>  Str::padLeft(3,6,"0"),
+            'order_number' => Str::padLeft(3, 6, "0"),
         ], [
             'product_id' => fake()->numberBetween(0, 10),
             'status_id' => fake()->numberBetween(1, 2),
-            'order_number' =>  Str::padLeft(4,6,"0"),
-        ]);
+            'order_number' => Str::padLeft(4, 6, "0"),
+        ]];
+        foreach ($orders as $order) {
+            Order::create($order);
+        }
     }
 }

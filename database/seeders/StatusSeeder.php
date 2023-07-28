@@ -17,8 +17,9 @@ class StatusSeeder extends Seeder
         Status::create([
             'name' => 'Pending',
             'is_active' => 1,
-        ], [
-            'name' => 'Pending',
+        ]);
+        Status::create([
+            'name' => 'Fulfilled',
             'is_active' => 1,
         ]);
     }
