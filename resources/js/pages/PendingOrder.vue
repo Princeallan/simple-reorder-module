@@ -26,7 +26,7 @@
                         {{ order.product_name }}
                     </th>
                     <td class="px-6 py-4">
-                        {{ order.created_at }}
+                        {{ formatDate(order.created_at) }}
                     </td>
                     <td class="px-6 py-4">
                         {{ order.order_number }}
@@ -47,8 +47,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import AppLayout from "../layouts/AppLayout.vue";
-// import {request} from '../helper'
-// import Loader from './components/Loader.vue';
+import dayjs from 'dayjs';
 
 const orders = ref([])
 const isLoading = ref()
@@ -64,7 +63,11 @@ const headers = {
 onMounted(() => {
     listPendingOrders()
 });
-
+const formatDate = (dateString) => {
+    const date = dayjs(dateString);
+    // Then specify how you want your dates to be formatted
+    return date.format('dddd MMMM D, YYYY');
+}
 const listPendingOrders = async () => {
     isLoading.value = true
     const req = await axios.get('/api/orders/' + status.value, headers)
