@@ -34,10 +34,10 @@
                         {{ product.fulfilled_orders_count }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ product.order_number }}
+                        {{ product.order_number ?? "N/A" }}
                     </td>
                     <td class="px-6 py-4">
-                        <button v-if="product.quantity > 0"
+                        <button v-if="product.quantity > 0 && product.order_number == null"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 @click="handleOrder(product.id)">
                             order

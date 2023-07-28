@@ -61,10 +61,16 @@ class OrderController extends Controller
 
     public function updateOrder($order_id, $status_id)
     {
-        Order::find($order_id)
-            ->update([
-                'status_id' => $status_id
-            ]);
+        $order = Order::find($order_id);
+        $product = Product::find($order->product_id);
+
+        if ($product && $status_id > Status::PENDING) {
+            $product->update(["order_number" => null]);
+        }
+
+        $order->update([
+            'status_id' => $status_id
+        ]);
 
         return response()->json(['status' => true, 'message' => "Ok"], 201);
     }

@@ -20,13 +20,14 @@ class ProductFactory extends Factory
     {
         Product::truncate();
 
-        $name = fake()->realText(50);
+        $name = fake()->word;
+
         return [
             'name' => $name,
             'slug' => Str::slug($name),
             'quantity' => fake()->numberBetween(0,10),
             'fulfilled_orders_count' => fake()->numberBetween(0,20),
-            'order_number' => Str::padLeft(fake()->numberBetween(0,20),6,"0"),
+            'order_number' => null,
         ];
     }
 }
