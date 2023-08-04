@@ -78,7 +78,7 @@ const handleProducts = async () => {
 
 const handleOrder = async (product_id) => {
     isLoading.value = true
-    alert('are you sure you want to make this order?')
+    alert('Are you sure you want to make this order?')
     await axios.post('/api/add-order/' + product_id, {}, headers)
     await handleProducts()
     isLoading.value = false

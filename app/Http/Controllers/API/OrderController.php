@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ReOrder;
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
@@ -45,32 +47,86 @@ class OrderController extends Controller
 
     }
 
-    public function listOrders($status_id)
+    public function listOrders()
     {
-        $orders = Order::query()
-            ->leftjoin('products', 'orders.product_id', 'products.id')
-            ->leftjoin('statuses', 'orders.status_id', 'statuses.id')
-            ->when($status_id, function ($q) use ($status_id) {
-                $q->where('orders.status_id', $status_id);
-            })
-            ->select('orders.*', 'products.name as product_name', 'statuses.name as status')
-            ->get();
+        $orders = Order::with(['product', 'status', 'user'])->get();
 
         return response()->json(['status' => true, 'data' => $orders]);
     }
 
-    public function updateOrder($order_id, $status_id)
+    public function listReOrders($status_id)
+    {
+        $reorders = ReOrder::with(['product', 'status', 'user'])
+            ->when($status_id, function ($q) use ($status_id) {
+                $q->where('re_orders.status_id', $status_id);
+            })->get();
+
+        return response()->json(['status' => true, 'data' => $reorders]);
+    }
+
+    public function makeReOrder($order_id)
     {
         $order = Order::find($order_id);
-        $product = Product::find($order->product_id);
 
-        if ($product && $status_id > Status::PENDING) {
-            $product->update(["order_number" => null]);
+        try {
+            DB::beginTransaction();
+
+            ReOrder::create([
+                'order_id' => $order->id,
+                'product_id' => $order->product_id,
+                'order_number' => $order->order_number,
+                'status_id' => Status::PENDING,
+                'user_id' => auth()->id() ?? null
+            ]);
+
+            DB::commit();
+
+        } catch (\Exception $exception) {
+            DB::rollback();
+
+            throw $exception;
         }
 
-        $order->update([
-            'status_id' => $status_id
-        ]);
+        return response()->json(['status' => true, 'message' => "Ok"], 201);
+    }
+
+    public function updateReOrder($reorder_id, $status_id)
+    {
+        $reorder = ReOrder::find($reorder_id);
+        $product = Product::find($reorder->product_id);
+
+        try {
+            DB::beginTransaction();
+
+            if ($product && $status_id > Status::PENDING) {
+                $product->update(["order_number" => null]);
+            }
+
+            $reorder->update([
+                'status_id' => $status_id
+            ]);
+
+            DB::commit();
+
+        } catch (\Exception $exception) {
+
+            DB::rollback();
+
+            throw $exception;
+        }
+
+        return response()->json(['status' => true, 'message' => "Ok"], 201);
+    }
+
+    public function deleteOrder($order_id)
+    {
+        $order = Order::find($order_id);
+        $reorders = ReOrder::where('order_id', $order->id)->get();
+
+        if (count($reorders) > 0)
+            $reorders->delete();
+
+        $order->delete();
 
         return response()->json(['status' => true, 'message' => "Ok"], 201);
     }

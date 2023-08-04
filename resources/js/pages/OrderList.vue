@@ -23,7 +23,7 @@
 
                 <tr v-for="order in orders" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ order.product_name }}
+                        {{ order.product.name }}
                     </th>
                     <td class="px-6 py-4">
                         {{ formatDate(order.created_at) }}
@@ -33,8 +33,12 @@
                     </td>
                     <td class="px-6 py-4">
                         <button class="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
-                                @click="fulFillOrder(order.id)">
-                            Fulfill
+                                @click="makeReOrder(order.id)">
+                            ReOrder
+                        </button>
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                @click="deleteOrder(order.id)">
+                            Delete
                         </button>
                     </td>
                 </tr>
@@ -51,8 +55,6 @@ import dayjs from 'dayjs';
 
 const orders = ref([])
 const isLoading = ref()
-const status = ref(1)
-const fulfil = ref(2)
 const token = localStorage.getItem('APP_USER_TOKEN')
 
 const headers = {
@@ -61,25 +63,32 @@ const headers = {
     }
 }
 onMounted(() => {
-    listPendingOrders()
+    listOrders()
 });
 const formatDate = (dateString) => {
     const date = dayjs(dateString);
     // Then specify how you want your dates to be formatted
     return date.format('dddd MMMM D, YYYY');
 }
-const listPendingOrders = async () => {
+const listOrders = async () => {
     isLoading.value = true
-    const req = await axios.get('/api/orders/' + status.value, headers)
+    const req = await axios.get('/api/orders', headers)
     orders.value = req.data.data
     isLoading.value = false
 }
 
-const fulFillOrder = async (order_id) => {
+const makeReOrder = async (order_id) => {
     isLoading.value = true
-    alert('are you sure you want to fulfil this order?')
-    await axios.post('/api/order/update/' + order_id + '/' + fulfil.value, {}, headers)
-    await listPendingOrders()
+    alert('Are you sure you want to reorder this order?')
+    await axios.post('/api/re-order/' + order_id, {}, headers)
+    await listOrders()
+    isLoading.value = false
+}
+const deleteOrder = async (order_id) => {
+    isLoading.value = true
+    alert('Are you sure you want to delete this order?')
+    await axios.delete('/api/order/delete/' + order_id, headers)
+    await listOrders()
     isLoading.value = false
 }
 </script>

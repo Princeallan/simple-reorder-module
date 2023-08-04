@@ -12,12 +12,16 @@ const router = createRouter({
             component: () => import('./pages/Home.vue')
         },
         {
+            path: '/orders',
+            component: () => import('./pages/OrderList.vue')
+        },
+        {
             path: '/pending-orders',
-            component: () => import('./pages/PendingOrder.vue')
+            component: () => import('./pages/PendingReOrders.vue')
         },
         {
             path: '/fulfilled-orders',
-            component: () => import('./pages/FulfilledOrder.vue')
+            component: () => import('./pages/FulfilledReOrders.vue')
         }
     ],
 })
