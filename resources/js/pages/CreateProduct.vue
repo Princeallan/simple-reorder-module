@@ -78,9 +78,12 @@
 <script setup>
 import {ref, reactive, computed, onMounted} from 'vue'
 import AppLayout from "../layouts/AppLayout.vue";
-import { useRoute } from 'vue-router';
+import {useRouter, useRoute} from 'vue-router';
+import { useNotification } from "@kyvg/vue3-notification";
 
-const router = useRoute();
+const { notify }  = useNotification()
+const route = useRoute();
+const router = useRouter();
 const isLoading = ref()
 const token = localStorage.getItem('APP_USER_TOKEN')
 const product = reactive({})
@@ -91,10 +94,6 @@ const headers = {
     }
 }
 
-const fetchItemData = async () => {
-    alert(productId);
-    let response = await axios.post(`/api/products/${productId}`);
-}
 const saveProduct = async () => {
     isLoading.value = true
 
@@ -103,13 +102,28 @@ const saveProduct = async () => {
         name: product.name,
         quantity: product.quantity,
         uom: product.uom,
-    }, headers)
+    }, headers).then(response => {
+
+        notify({
+            type: 'success',
+            title: "Authorization",
+            text: "Product successfully saved!",
+        });
+
+        router.push('/home')
+        isLoading.value = false
+    }).catch(error =>{
+        notify({
+            type: 'error',
+            title: "Failed",
+            text: "Saving Failed, Check before trying again!",
+        });
+    });
 
     resetForm()
 
-    await router.push('/home')
-    isLoading.value = false
 }
+
 function resetForm() {
     product.name = '';
     product.uom = '';

@@ -52,7 +52,11 @@
 import {ref, onMounted} from 'vue'
 import AppLayout from "../layouts/AppLayout.vue";
 import dayjs from 'dayjs';
+import { useNotification } from "@kyvg/vue3-notification";
+import {useRouter} from "vue-router";
 
+const { notify }  = useNotification()
+const router = useRouter()
 const orders = ref([])
 const isLoading = ref()
 const token = localStorage.getItem('APP_USER_TOKEN')
@@ -80,15 +84,45 @@ const listOrders = async () => {
 const makeReOrder = async (order_id) => {
     isLoading.value = true
     alert('Are you sure you want to reorder this order?')
-    await axios.post('/api/re-order/' + order_id, {}, headers)
-    await listOrders()
-    isLoading.value = false
+    await axios.post('/api/re-order/' + order_id, {}, headers).then(response => {
+
+        notify({
+            type: 'success',
+            title: "Success",
+            text: "ReOrder Successfully Added!!!",
+        });
+
+        listOrders()
+        isLoading.value = false
+    }).catch(error =>{
+
+        notify({
+            type: 'error',
+            title: "Failed",
+            text: "ReOrder Failed, Check before trying again!",
+        });
+
+    })
 }
 const deleteOrder = async (order_id) => {
     isLoading.value = true
     alert('Are you sure you want to delete this order?')
-    await axios.delete('/api/order/delete/' + order_id, headers)
-    await listOrders()
-    isLoading.value = false
+    await axios.delete(`/api/order/delete/${order_id}`, headers).then(response => {
+
+        notify({
+            type: 'success',
+            title: "Success",
+            text: "Order successfully deleted!",
+        });
+
+        listOrders()
+        isLoading.value = false
+    }).catch(error =>{
+        notify({
+            type: 'error',
+            title: "Failed",
+            text: "Deleting Failed, Check before trying again!",
+        });
+    })
 }
 </script>

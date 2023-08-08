@@ -123,8 +123,10 @@ class OrderController extends Controller
         $order = Order::find($order_id);
         $reorders = ReOrder::where('order_id', $order->id)->get();
 
-        if (count($reorders) > 0)
-            $reorders->delete();
+        if (count($reorders) > 0) {
+
+            $reorders->each->delete();
+        }
 
         $order->delete();
 

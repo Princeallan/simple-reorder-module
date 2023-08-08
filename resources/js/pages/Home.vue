@@ -77,9 +77,10 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import AppLayout from "../layouts/AppLayout.vue";
-// import router from "../route.js";
 import { useRouter } from 'vue-router';
+import {useNotification} from "@kyvg/vue3-notification";
 
+const {notify} = useNotification()
 const products = ref([])
 const router = useRouter()
 const isLoading = ref()
@@ -104,9 +105,25 @@ const handleProducts = async () => {
 const handleOrder = async (product_id) => {
     isLoading.value = true
     alert('Are you sure you want to make this order?')
-    await axios.post('/api/add-order/' + product_id, {}, headers)
-    await handleProducts()
-    isLoading.value = false
+    await axios.post('/api/add-order/' + product_id, {}, headers).then(response => {
+
+        notify({
+            type: 'success',
+            title: "Success",
+            text: "Order Successfully Added!!!",
+        });
+
+        handleProducts()
+        isLoading.value = false
+    }).catch(error =>{
+
+        notify({
+            type: 'error',
+            title: "Failed",
+            text: "Order Failed, Check before trying again!",
+        });
+
+    })
 }
 const editProduct = async (product_id) => {
     await router.push({ name: "edit-product", params: { id: product_id } });

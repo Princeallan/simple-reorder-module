@@ -78,8 +78,10 @@
 <script setup>
 import {ref, reactive, computed, onMounted} from 'vue'
 import AppLayout from "../layouts/AppLayout.vue";
-import {useRouter, useRoute } from 'vue-router';
+import {useRouter, useRoute} from 'vue-router';
+import {useNotification} from "@kyvg/vue3-notification";
 
+const {notify} = useNotification()
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref()
@@ -113,10 +115,24 @@ const updateProduct = async () => {
         name: product.name,
         quantity: product.quantity,
         uom: product.uom,
-    }, headers)
+    }, headers).then((response) => {
 
-    await router.push('/home')
-    isLoading.value = false
+        notify({
+            type: 'success',
+            title: "Authorization",
+            text: "Product successfully updates!!",
+        }).catch(error =>{
+            notify({
+                type: 'error',
+                title: "Failed",
+                text: "Saving Failed, Check before trying again!",
+            });
+        });
+
+        router.push('/home')
+        isLoading.value = false
+    })
+
 }
 
 </script>
