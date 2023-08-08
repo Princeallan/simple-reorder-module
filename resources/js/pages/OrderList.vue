@@ -32,7 +32,7 @@
                         {{ order.order_number }}
                     </td>
                     <td class="px-6 py-4">
-                        <button class="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
+                        <button class="bg-emerald-500 mr-1 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
                                 @click="makeReOrder(order.id)">
                             ReOrder
                         </button>

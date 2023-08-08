@@ -55,12 +55,12 @@
                     </td>
                     <td class="px-6 py-4">
                         <button v-if="product.quantity > 0 && product.order_number == null"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-1"
                                 @click="handleOrder(product.id)">
                             order
                         </button>
 
-                        <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                        <button class="bg-gray-500 mr-1 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                             @click="editProduct(product.id)">Edit</button>
 
                         <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
