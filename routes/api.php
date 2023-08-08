@@ -10,6 +10,10 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('products', [ProductController::class, 'index']);
+    Route::post('products', [ProductController::class, 'storeProduct']);
+    Route::get('products/{product}', [ProductController::class, 'getProductData']);
+    Route::put('products/update/{product}', [ProductController::class, 'updateProduct']);
+    Route::delete('products/{product}', [ProductController::class, 'deleteProduct']);
     Route::post('add-order/{product_id}', [OrderController::class, 'addOrder']);
     Route::get('orders', [OrderController::class, 'listOrders']);
     Route::get('re-orders/{status}', [OrderController::class, 'listReOrders']);

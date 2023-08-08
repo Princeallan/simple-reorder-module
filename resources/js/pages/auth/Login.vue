@@ -68,6 +68,7 @@ const handleLogin = async () => {
         const result = await axios.post('/api/auth/login', form)
         if (result.status === 200 && result.data && result.data.token) {
             localStorage.setItem('APP_USER_TOKEN', result.data.token)
+            localStorage.setItem('APP_USER', result.data)
             await router.push('home')
         }
     } catch (e) {

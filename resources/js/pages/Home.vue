@@ -1,5 +1,22 @@
 <template>
     <AppLayout>
+        <div class="grid grid-flow-col gap-4">
+            <div class="ml-5">
+                <h2 class="mt-5 block uppercase font-bold">Products</h2>
+            </div>
+            <div class="mr-10">
+                <router-link to="/create-product">
+                    <button type="button"
+                            class="float-right text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:shadow-none focus:outline-none active:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                        <img src="//cdn.jsdelivr.net/npm/heroicons@1.0.1/outline/plus.svg"
+                             class="w-7 text-white-800 fill-current inline"/>
+                        Create Product
+                    </button>
+                </router-link>
+
+            </div>
+        </div>
+        <hr>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -42,6 +59,13 @@
                                 @click="handleOrder(product.id)">
                             order
                         </button>
+
+                        <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                            @click="editProduct(product.id)">Edit</button>
+
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            @click="deleteProduct(product.id)">Delete</button>
+
                     </td>
                 </tr>
 
@@ -53,10 +77,11 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import AppLayout from "../layouts/AppLayout.vue";
-// import {request} from '../helper'
-// import Loader from './components/Loader.vue';
+// import router from "../route.js";
+import { useRouter } from 'vue-router';
 
 const products = ref([])
+const router = useRouter()
 const isLoading = ref()
 const token = localStorage.getItem('APP_USER_TOKEN')
 
@@ -82,5 +107,18 @@ const handleOrder = async (product_id) => {
     await axios.post('/api/add-order/' + product_id, {}, headers)
     await handleProducts()
     isLoading.value = false
+}
+const editProduct = async (product_id) => {
+    await router.push({ name: "edit-product", params: { id: product_id } });
+}
+
+const deleteProduct = async (product_id) => {
+    try {
+        await axios.delete(`/api/products/${product_id}`, headers);
+        await handleProducts()
+        console.log('Product and related orders deleted');
+    } catch (error) {
+        console.error('Error deleting product:', error);
+    }
 }
 </script>

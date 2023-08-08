@@ -9,6 +9,7 @@ const router = createRouter({
         },
         {
             path: '/home',
+            props: true,
             component: () => import('./pages/Home.vue')
         },
         {
@@ -22,6 +23,18 @@ const router = createRouter({
         {
             path: '/fulfilled-orders',
             component: () => import('./pages/FulfilledReOrders.vue')
+        },
+        {
+            path: '/create-product',
+            name: 'create-product',
+            props: true,
+            component: () => import('./pages/CreateProduct.vue')
+        },
+        {
+            path: '/product/edit/:id',
+            name: 'edit-product',
+            props: true,
+            component: () => import('./pages/EditProduct.vue')
         }
     ],
 })
